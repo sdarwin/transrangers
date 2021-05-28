@@ -71,12 +71,12 @@ jobs:
           git clone https://github.com/ericniebler/range-v3.git
           # Go to the library root directory
           cd range-v3/include
-          cp -rp * /usr/local/include/
+          sudo cp -rp * /usr/local/include/
 
       - name: Install transrangers
         run: |
           cd $GITHUB_WORKSPACE
-          cp transrangers.hpp /usr/local/includes/
+          sudo cp transrangers.hpp /usr/local/includes/
 
       - name: Run tests
         run: |
