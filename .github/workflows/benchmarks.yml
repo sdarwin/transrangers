@@ -76,10 +76,14 @@ jobs:
           cd $GITHUB_WORKSPACE
           sudo cp include/transrangers.hpp /usr/local/include/
 
-      - name: Run tests
+      - name: Compile
         run: |
           cd $GITHUB_WORKSPACE
           ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}} -o ${{matrix.outputfile}}
+
+      - name: Run tests
+        run: |
+          ./${{matrix.outputfile}}
 
 #  windows:
 #    strategy:
