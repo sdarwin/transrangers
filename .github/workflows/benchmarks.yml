@@ -1,6 +1,7 @@
 name: benchmarks
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
@@ -66,17 +67,14 @@ jobs:
         run: |
           mkdir -p /opt/github
           cd /opt/github
-          # ericniebler/range-v3
-          # Check out the library.
           git clone https://github.com/ericniebler/range-v3.git
-          # Go to the library root directory
           cd range-v3/include
           sudo cp -rp * /usr/local/include/
 
       - name: Install transrangers
         run: |
           cd $GITHUB_WORKSPACE
-          sudo cp transrangers.hpp /usr/local/includes/
+          sudo cp include/transrangers.hpp /usr/local/includes/
 
       - name: Run tests
         run: |
