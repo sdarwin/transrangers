@@ -74,7 +74,7 @@ jobs:
       - name: Install transrangers
         run: |
           cd $GITHUB_WORKSPACE
-          sudo cp include/transrangers.hpp /usr/local/includes/
+          sudo cp include/transrangers.hpp /usr/local/include/
 
       - name: Run tests
         run: |
