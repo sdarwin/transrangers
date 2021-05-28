@@ -1,0 +1,110 @@
+name: benchmarks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - develop
+      - gha**
+
+jobs:
+  posix:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - compiler: g++
+            compileroptions: -std=c++2a -lbenchmark -lpthread -O3 -DNDEBUG
+            sourcefile: perf/perf.cpp
+            outputfile: Perf
+            os: ubuntu-20.04
+            install: htop
+          - compiler: clang++
+            compileroptions: -std=c++2a -lbenchmark -lpthread -O3 -DNDEBUG
+            sourcefile: perf/perf.cpp
+            outputfile: Perf
+            os: ubuntu-20.04
+            install: htop
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install packages
+        if: matrix.install
+        run: sudo apt install ${{matrix.install}}
+
+      - name: Install google/benchmark
+        run: |
+          mkdir -p /opt/github
+          cd /opt/github
+          # Check out the library.
+          git clone https://github.com/google/benchmark.git
+          # Benchmark requires Google Test as a dependency. Add the source tree as a subdirectory.
+          git clone https://github.com/google/googletest.git benchmark/googletest
+          # Go to the library root directory
+          cd benchmark
+          # Make a build directory to place the build output.
+          cmake -E make_directory "build"
+          # Generate build system files with cmake.
+          cmake -E chdir "build" cmake -DCMAKE_BUILD_TYPE=Release ../
+          # or, starting with CMake 3.13, use a simpler form:
+          # cmake -DCMAKE_BUILD_TYPE=Release -S . -B "build"
+          # 
+          # Can this be skipped?
+          # # Build the library.
+          # cmake --build "build" --config Release
+          # # run the tests to check the build.
+          # cmake -E chdir "build" ctest --build-config Release
+
+          # install the library globally
+          sudo cmake --build "build" --config Release --target install
+
+      - name: Install range-v3
+        run: |
+          mkdir -p /opt/github
+          cd /opt/github
+          # ericniebler/range-v3
+          # Check out the library.
+          git clone https://github.com/ericniebler/range-v3.git
+          # Go to the library root directory
+          cd range-v3/include
+          cp -rp * /usr/local/include/
+
+      - name: Install transrangers
+        run: |
+          cd $GITHUB_WORKSPACE
+          cp transrangers.hpp /usr/local/includes/
+
+      - name: Run tests
+        run: |
+          cd $GITHUB_WORKSPACE
+          ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}} -o ${{matrix.outputfile}}
+
+#  windows:
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - compiler: msvc
+#            compileroptions: -std=c++2a -lbenchmark -lpthread -O3 -DNDEBUG
+#            sourcefile: perf/perf.cpp
+#            outputfile: Perf
+#            os: windows-2019
+#
+#    runs-on: ${{matrix.os}}
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Setup Boost
+#        shell: powershell
+#        run: |
+#
+#      - name: Run tests
+#        shell: cmd
+#        run: |
+#          cd $GITHUB_WORKSPACE
+#          ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}} -o ${{matrix.outputfile}}
