@@ -102,18 +102,6 @@ jobs:
             outputfile: perf.exe
             vcvarsarch: x86_amd64
             os: windows-2019
-          - compiler: cl
-            compileroptions: /std:c++latest /O2 /EHsc /MD
-            sourcefile: perf/perf.orig.cpp
-            outputfile: perf.exe
-            vcvarsarch: x64
-            os: windows-2019
-          - compiler: cl
-            compileroptions: /std:c++latest /O2 /EHsc /MD
-            sourcefile: perf/perf.orig.cpp
-            outputfile: perf.exe
-            vcvarsarch: x86_amd64
-            os: windows-2019
 
     runs-on: ${{matrix.os}}
 
@@ -168,8 +156,12 @@ jobs:
           set INCLUDE=%INCLUDE%;%GITHUB_WORKSPACE%\include
           echo %INCLUDE%
           ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}} /out:${{matrix.outputfile}}
+          pwd
+          dir
 
       - name: Run tests
         shell: cmd
         run: |
-          .\${{matrix.outputfile}}
+          pwd
+          dir
+          ${{matrix.outputfile}}
