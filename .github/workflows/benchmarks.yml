@@ -151,8 +151,8 @@ jobs:
           cd %GITHUB_WORKSPACE%
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           set INCLUDE=%INCLUDE%;C:\Program Files (x86)\benchmark\include
-          set LIB=%LIB%;C:\Program Files (x86)\benchmark\libe
-          set INCLUDE=%INCLUDE%;C:\opt\github\ericniebler\range-v3\include
+          set LIB=%LIB%;C:\Program Files (x86)\benchmark\lib
+          set INCLUDE=%INCLUDE%;C:\opt\github\range-v3\include
           set INCLUDE=%INCLUDE%;%GITHUB_WORKSPACE%\include
           echo %INCLUDE%
           ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}}
