@@ -158,10 +158,12 @@ jobs:
           ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}} /out:${{matrix.outputfile}}
           pwd
           dir
+          dir perf
 
       - name: Run tests
         shell: cmd
         run: |
           pwd
           dir
+          dir perf
           ${{matrix.outputfile}}
