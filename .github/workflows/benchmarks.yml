@@ -111,8 +111,11 @@ jobs:
       - name: Install google/benchmark
         shell: powershell
         run: |
-          mkdir -p /opt/github
-          cd /opt/github
+          if ( -Not (Test-Path -Path "C:\opt\github") )
+          {
+            mkdir -p C:\opt\github
+          }
+          cd C:\opt\github
           git clone https://github.com/google/benchmark.git
           # Benchmark requires Google Test as a dependency. Add the source tree as a subdirectory.
           git clone https://github.com/google/googletest.git benchmark/googletest
@@ -134,10 +137,13 @@ jobs:
       - name: Install range-v3
         shell: powershell
         run: |
-          mkdir -p /opt/github
-          cd /opt/github
+          if ( -Not (Test-Path -Path "C:\opt\github") )
+          {
+            mkdir -p C:\opt\github
+          }
+          cd C:\opt\github
           git clone https://github.com/ericniebler/range-v3.git
-          # set include path later          
+          # set include path later
 
       - name: Run tests
         shell: cmd
