@@ -155,7 +155,7 @@ jobs:
           set INCLUDE=%INCLUDE%;C:\opt\github\range-v3\include
           set INCLUDE=%INCLUDE%;%GITHUB_WORKSPACE%\include
           echo %INCLUDE%
-          ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}} /out:${{matrix.outputfile}}
+          ${{matrix.compiler}} ${{matrix.sourcefile}} ${{matrix.compileroptions}}
           pwd
           dir
           dir perf
